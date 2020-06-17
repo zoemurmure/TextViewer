@@ -61,6 +61,17 @@ class TV(object):
         self.smaller_button = ttk.Button(status_frame, text="-", command=self.smaller_font, state="disabled")
         self.smaller_button.grid(column=4, row=0, sticky=E)
 
+    def key_bind(self):
+        self.root.bind("<space>", self.next_page)
+        #self.root.bind("<Right>", self.next_page)
+        #self.root.bind("<Left>", self.prev_page)
+
+    def next_page(self, *args):
+        self.content_text.yview_scroll(1, 'pages')
+
+    def prev_page(self, *args):
+        self.content_text.yview_scroll(-1, 'pages')
+
     def destroy(self):
         self.content_text.destroy()
         self.chapters_lb.destroy()
@@ -77,11 +88,12 @@ class TV(object):
             self.root.title(filename)
             self.text = content.Content(filename)
         # 具体内容
-        self.content_text = Text(self.content_frame)
+        self.content_text = Text(self.content_frame, padx=30)
         self.content_text.grid(column=0, row=0, sticky=(N, W, E, S)) 
         self.content_text.insert("1.0", self.text.content)
         self.content_text.configure(font=font.Font(size=self.text.font_size))
         self.content_text.configure(state="disabled")
+        self.change_color()
         content_scroll = ttk.Scrollbar(self.content_frame, orient=VERTICAL, command=self.content_text.yview)
         content_scroll.grid(column=1, row=0, sticky=(N, S))
         self.content_text.configure(yscrollcommand=content_scroll.set)
@@ -109,6 +121,8 @@ class TV(object):
         self.bigger_button.configure(state="normal")
         self.smaller_button.configure(state="normal")
 
+        self.key_bind()
+
     def show_chapter(self, *args):
         if self.text.if_chapter:
             self.text.if_chapter = False 
@@ -118,7 +132,7 @@ class TV(object):
             self.chapter_frame.grid(column=0, row=0, sticky=(N, W, E, S))
 
     def change_color(self, *args):
-        color = self.text.get_new_color()
+        color = self.text.get_color()
         self.content_text.configure(background=color[1])
         self.content_text.configure(foreground=color[0])
 
@@ -132,7 +146,7 @@ class TV(object):
 
     def select_chapter(self, *args):
         idx = int(self.chapters_lb.curselection()[0])
-        self.content_text.see(self.content_text.search(self.text.chapters[idx], 1.0))
+        self.content_text.yview(self.content_text.search(self.text.chapters[idx], 1.0))
 
 
 tv = TV()

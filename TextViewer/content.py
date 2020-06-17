@@ -9,7 +9,7 @@ class Content(object):
         self.chapters = []
         self.font_size = 15
         self.if_chapter = True
-        self.color_idx = 0
+        self.color_idx = 1
 
         self.set_content()
         self.set_chapters()
@@ -34,10 +34,11 @@ class Content(object):
     def set_chapters(self):
         self.chapters = Content.pattern.findall(self.content)
 
-    def get_new_color(self):
+    def get_color(self):
+        color = Content.colors[self.color_idx]
         self.color_idx = (self.color_idx + 1) % 3
         
-        return Content.colors[self.color_idx]
+        return color
 
     def increase_size(self):
         self.font_size += 1

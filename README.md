@@ -4,7 +4,7 @@
 
 ## 软件截图
 
-![screenshot](.\docs\screenshot.png)
+![screenshot](\docs\screenshot.png)
 
 ## 可识别章节格式
 

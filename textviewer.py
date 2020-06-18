@@ -1,3 +1,4 @@
 from TextViewer import tv
 
-viewer = tv.TV()
+def main():
+    viewer = tv.TV()

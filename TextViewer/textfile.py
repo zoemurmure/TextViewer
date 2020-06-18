@@ -2,7 +2,7 @@ import re
 
 class TextFile(object):
     # 自动识别章节信息的正则表达式
-    PATTERN = re.compile(r'^\s*[0-9]+\.?\s\S*|^\s*第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*|^\s*chapter\s*[0-9]+\s\S*', re.MULTILINE)
+    PATTERN = re.compile(r'^\s*[0-9]+[\.、]?\s\S*|^\s*第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*|^\s*chapter\s*[0-9]+\s\S*', re.MULTILINE)
 
     def __init__(self, file, codec):
         self.file_name = file
@@ -15,7 +15,6 @@ class TextFile(object):
     def update_content(self, codec):
         """
         根据提供的编码格式更新文本内容
-        为增加可读性，在段落间添加了一个换行符
         """
         self.content = []
         self.codec = codec
@@ -26,7 +25,7 @@ class TextFile(object):
             except UnicodeDecodeError:
                 self.content = ["无法解析文件内容"]
                 
-            self.content = "\n".join(self.content)
+            self.content = "".join(self.content)
 
         self.update_chapters()
 

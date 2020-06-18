@@ -13,7 +13,12 @@ config = {
     'install_requires': [''],
     'packages': ['TextViewer'],
     'include_package_data': True,  
-    'scripts': ['bin/textviewer.py'],
+    #'scripts': ['bin/textviewer.py'],
+    'entry_points': {
+        "gui_scripts": [
+            "textviewer = TextViewer.tv:TV",
+        ]
+    },
     'name': 'TextViewer',
     'zip_safe': False,
 

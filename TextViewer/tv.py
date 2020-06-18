@@ -20,25 +20,33 @@ class TV(object):
 
         self.root = Tk()
         self.construct()
+        self.key_bind()
         self.root.mainloop()
+
+    def get_window_size(self):
+        width = self.root.winfo_screenwidth()
+        height = self.root.winfo_screenheight() - 70
+
+        return str(width)+"x"+str(height)+"+0+0"
 
     def construct(self):
         """
         构建如下格局
-        --------------------------------
+        -------------------------------------
         章   |       具体内容
         节   |
         列   |
         表   |
         信   |
         息   |
-        --------------------------------
-        章节   打开文件  背景颜色 + - 编码
-        --------------------------------
+        -------------------------------------
+        章节   打开文件 百分比 背景颜色 + - 编码
+        -------------------------------------
         """
         # 基本窗口
         self.root.title("Text查看器")
-        self.root.geometry('800x600')
+        self.root.geometry(self.get_window_size())
+        self.root.state("zoomed") 
         self.root.columnconfigure(1, weight=3)
         self.root.rowconfigure(0, weight=1)
         # 章节列表框架
@@ -80,9 +88,15 @@ class TV(object):
     def key_bind(self):
         """
         快捷键：
-        空格——翻页
+        空格 —— 下一页
+        左右键 —— 翻页
+        上下键 —— 上移或下移一行
         """
-        self.root.bind("<space>", self.next_page)
+        self.root.bind_class("Text", "<space>", self.next_page)
+        self.root.bind_class("Text", "<Right>", self.next_page)
+        self.root.bind_class("Text", "<Left>", self.prev_page)
+        self.root.bind_class("Text", "<Up>", self.prev_line)
+        self.root.bind_class("Text", "<Down>", self.next_line)
 
     def destroy(self):
         """
@@ -100,7 +114,7 @@ class TV(object):
         显示具体的章节及内容信息，设置按钮及快捷键
         """
         # 具体内容
-        self.content_text = Text(self.content_frame, padx=30, 
+        self.content_text = Text(self.content_frame, padx=30,spacing1=15, spacing2=10, spacing3=15,
             font=font.Font(size=self.font_size), 
             background=TV.COLORS[self.cur_color][1], foreground=TV.COLORS[self.cur_color][0])
         self.content_text.grid(column=0, row=0, sticky=(N, W, E, S)) 
@@ -134,10 +148,14 @@ class TV(object):
         self.bigger_button.configure(state="normal")
         self.smaller_button.configure(state="normal")     
 
-        self.key_bind()
+        #self.key_bind()
 
 # 下面都是回调函数
     def change_view(self, *num):
+        """
+        内容TEXT的回调函数
+        内容滚动时，修改滚动条位置及百分比数值
+        """
         self.content_scroll.set(num[0], num[1])
         percent = "{:.2f}".format(float(num[1])*100) + " %"
         self.percent_label.configure(text=percent)
@@ -160,12 +178,33 @@ class TV(object):
 
         self.show_content_widgets()
 
+    def prev_page(self, *args):
+        """
+        LEFT键的回调函数
+        上一页
+        """
+        self.content_text.yview_scroll(-1, 'pages')
+
     def next_page(self, *args):
         """
-        空格键的回调函数
+        空格键、RIGHT键的回调函数
         翻页
         """
         self.content_text.yview_scroll(1, 'pages')
+
+    def next_line(self, *args):
+        """
+        DOWN键的回调函数
+        下一行
+        """
+        self.content_text.yview_scroll(1, 'units')
+
+    def prev_line(self, *args):
+        """
+        UP键的回调函数
+        上一行
+        """
+        self.content_text.yview_scroll(-1, 'units')
 
     def show_chapter(self, *args):
         """

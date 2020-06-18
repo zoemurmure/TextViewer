@@ -13,7 +13,7 @@
 使用的正则表达式为
 
 ```python
-PATTERN = re.compile(r'^[0-9]+\.?\s\S*|^第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*', re.MULTILINE)
+PATTERN = re.compile(r'^[0-9]+\.?\s\S*|^第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*|^chapter\s*[0-9]+\s\S*', re.MULTILINE)
 ```
 
 ## 可设置的背景颜色
@@ -38,10 +38,11 @@ utf-16
 
 ## 安装方法
 
-```
+```bash
 git clone https://github.com/zoemurmure/TextViewer.git
 cd TextViewer
 python setup.py install
 ```
 
 之后在命令行输入`textviewer`就可以启动程序了
+

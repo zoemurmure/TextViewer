@@ -56,24 +56,27 @@ class TV(object):
         status_frame.columnconfigure(0, weight=1)
         status_frame.columnconfigure(1, weight=1)
         status_frame.columnconfigure(2, weight=1)
+        status_frame.columnconfigure(3, weight=1)
         # 设置栏按钮
         self.chapter_button = ttk.Button(status_frame, text="章节", command=self.show_chapter, state="disabled", takefocus=0)
         self.chapter_button.grid(column=0, row=0, sticky=W)
         self.openfile_button = ttk.Button(status_frame, text="打开文件", command=self.open_file, takefocus=0)
         self.openfile_button.grid(column=1, row=0, sticky=(E,W))
+        self.percent_label = ttk.Label(status_frame, text="0 %")
+        self.percent_label.grid(column=2, row=0, sticky=E)
         self.color_box = ttk.Combobox(status_frame, values=list(TV.COLORS.keys()), state="readonly", takefocus=0)
         self.color_box.set(self.cur_color)
         self.color_box.bind('<<ComboboxSelected>>', self.change_color)
-        self.color_box.grid(column=2, row=0, sticky=E)
+        self.color_box.grid(column=3, row=0, sticky=E)
         self.bigger_button = ttk.Button(status_frame, text="+", command=self.bigger_font, state="disabled", takefocus=0)
-        self.bigger_button.grid(column=3, row=0, sticky=E)
+        self.bigger_button.grid(column=4, row=0, sticky=E)
         self.smaller_button = ttk.Button(status_frame, text="-", command=self.smaller_font, state="disabled", takefocus=0)
-        self.smaller_button.grid(column=4, row=0, sticky=E)
+        self.smaller_button.grid(column=5, row=0, sticky=E)
         self.codec_box = ttk.Combobox(status_frame, values=TV.CODEC, state="readonly", takefocus=0)
         self.codec_box.current(self.cur_codec)
         self.codec_box.bind('<<ComboboxSelected>>', self.change_codec)
-        self.codec_box.grid(column=5, row=0, sticky=E)
-
+        self.codec_box.grid(column=6, row=0, sticky=E)
+        
     def key_bind(self):
         """
         快捷键：
@@ -106,7 +109,8 @@ class TV(object):
         # 滚动条
         self.content_scroll = ttk.Scrollbar(self.content_frame, orient=VERTICAL, command=self.content_text.yview)
         self.content_scroll.grid(column=1, row=0, sticky=(N, S))
-        self.content_text.configure(yscrollcommand=self.content_scroll.set)
+        #self.content_text.configure(yscrollcommand=self.content_scroll.set)
+        self.content_text.configure(yscrollcommand=self.change_view)
 
         # 章节信息
         v = StringVar()
@@ -128,11 +132,16 @@ class TV(object):
         self.chapter_button.configure(state="normal")
         self.color_box.configure(state="readonly")
         self.bigger_button.configure(state="normal")
-        self.smaller_button.configure(state="normal")
+        self.smaller_button.configure(state="normal")     
 
         self.key_bind()
 
 # 下面都是回调函数
+    def change_view(self, *num):
+        self.content_scroll.set(num[0], num[1])
+        percent = "{:.2f}".format(float(num[1])*100) + " %"
+        self.percent_label.configure(text=percent)
+
     def open_file(self, *args):
         """
         “打开文件”按钮的回调函数

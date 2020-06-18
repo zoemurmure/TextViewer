@@ -2,7 +2,7 @@ import re
 
 class TextFile(object):
     # 自动识别章节信息的正则表达式
-    PATTERN = re.compile(r'^[0-9]+\.?\s\S*|^第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*|^chapter\s*[0-9]+\s\S*', re.MULTILINE)
+    PATTERN = re.compile(r'^\s*[0-9]+\.?\s\S*|^\s*第?[0-9一二三四五六七八九十百千]+[章节部]\s\S*|^\s*chapter\s*[0-9]+\s\S*', re.MULTILINE)
 
     def __init__(self, file, codec):
         self.file_name = file

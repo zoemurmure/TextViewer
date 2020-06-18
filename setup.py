@@ -9,7 +9,7 @@ config = {
     'url': 'https://github.com/zoemurmure/TextViewer',
     'download_url': 'https://github.com/zoemurmure/TextViewer',
     'author_email': 'zoemurmure@gmail.com',
-    'version': '1.0',
+    'version': '1.1',
     'install_requires': [''],
     'packages': ['TextViewer'],
     'include_package_data': True,  

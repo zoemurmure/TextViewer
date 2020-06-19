@@ -36,21 +36,15 @@ gb2312
 
 utf-16
 
-## 安装方法
+## EXE文件生成方法
 
 ```bash
-git clone https://github.com/zoemurmure/TextViewer.git
-cd TextViewer
-python setup.py install
+pyinstaller -w -F .\run.py -i ./icon/favicon.ico
 ```
 
-之后在命令行输入`textviewer`就可以启动程序了
+在`textviewer`子目录下输入上面的命令
 
-## 卸载
-
-```bash
-pip uninstall textviewer
-```
+**软件运行时会在用户目录下的`AppData/Local/TextViewer`中生成一个history文件用于记录历史信息**
 
 ## 版本更新说明
 
@@ -73,3 +67,27 @@ pip uninstall textviewer
 窗口启动自动最大化（windows 和 Mac OS X）
 
 优化启动模式，启动后不再保留命令行
+
+### 2.0 最终放弃版本...
+
+放弃了setup.py的安装方法，使用Pyinstaller单独生成了exe文件放入了release中，可自行下载
+
+修改默认编码为gbk
+
+增加命令行参数，从命令行直接传入需要打开的文件路径
+
+content_text的优化，研究delete功能
+
+title只显示文件名
+
+添加了icon图标
+
+加入历史记录功能(这个功能有一些问题，由于tkinter会异步调整字体高度，导致yview返回的值在未调整完之前一直在变，所以记录的阅读历史会存在误差)
+
+#### 放弃原因
+
+由于历史记录功能无法完善，始终没有在官方文档中找到其他获取显示位置的方法（如果有请一定要告诉我），所以决定专用wxpython重写一遍这个软件
+
+#### wxpython
+
+这个之后会另起一个项目
